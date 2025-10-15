@@ -1,0 +1,42 @@
+{
+  "name": "voting-dapp",
+  "version": "1.0.0",
+  "description": "A decentralized voting application with secure voter registration and transparent results",
+  "main": "truffle-config.js",
+  "scripts": {
+    "compile": "truffle compile",
+    "migrate": "truffle migrate",
+    "migrate:development": "truffle migrate --network development",
+    "migrate:sepolia": "truffle migrate --network sepolia",
+    "test": "truffle test",
+    "dev": "truffle develop",
+    "console": "truffle console",
+    "frontend": "cd frontend && npx http-server -p 3000 -c-1",
+    "ganache": "ganache --deterministic --accounts 10 --host 0.0.0.0",
+    "verify": "truffle run verify",
+    "networks": "truffle networks",
+    "clean": "rm -rf build/contracts/*"
+  },
+  "keywords": [
+    "blockchain",
+    "ethereum",
+    "voting",
+    "dapp",
+    "smart-contracts",
+    "truffle",
+    "web3"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "@truffle/hdwallet-provider": "^2.1.15",
+    "dotenv": "^17.2.3",
+    "truffle": "^5.11.5",
+    "web3": "^4.16.0"
+  },
+  "devDependencies": {
+    "chai": "^6.2.0",
+    "truffle-assertions": "^0.9.2"
+  }
+}

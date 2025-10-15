@@ -1,0 +1,72 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Build artifacts
+build/
+dist/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+*.tmp
+*.temp
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Truffle
+.openzeppelin/
+
+# Coverage reports
+coverage/
+.coverage_*
+.nyc_output
+
+# Temporary files
+*.tmp
+*.temp
+
+# Local blockchain data
+.ganache/
+
+# Frontend build artifacts (if any)
+frontend/dist/
+frontend/build/
+
+# Cache directories
+.cache/
+.parcel-cache/
+
+# Testing artifacts
+test-results/
+junit.xml
+
+# Backup files
+*.backup
+*.bak
+
+# MetaMask artifacts (if any)
+metamask-state/
+
+# Local development files
+.local/
+.development/
+dev-tools/

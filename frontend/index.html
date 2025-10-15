@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting DApp - Decentralized Voting System</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-vote-yea"></i>
+                    <h1>Voting DApp</h1>
+                </div>
+                <div class="wallet-status">
+                    <button id="connectWallet" class="btn btn-primary">
+                        <i class="fas fa-wallet"></i>
+                        Connect Wallet
+                    </button>
+                    <div id="walletInfo" class="wallet-info hidden">
+                        <span id="walletAddress"></span>
+                        <span id="networkInfo"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Status Banner -->
+            <div id="statusBanner" class="status-banner">
+                <div class="status-content">
+                    <i class="fas fa-info-circle"></i>
+                    <span id="statusMessage">Connecting to blockchain...</span>
+                </div>
+            </div>
+
+            <!-- Tabs Navigation -->
+            <div class="tabs">
+                <button class="tab active" data-tab="voting">
+                    <i class="fas fa-vote-yea"></i>
+                    Vote
+                </button>
+                <button class="tab" data-tab="results">
+                    <i class="fas fa-chart-bar"></i>
+                    Results
+                </button>
+                <button class="tab" data-tab="admin" id="adminTab" style="display: none;">
+                    <i class="fas fa-cog"></i>
+                    Admin
+                </button>
+            </div>
+
+            <!-- Voting Tab -->
+            <div id="votingTab" class="tab-content active">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-ballot-check"></i> Cast Your Vote</h2>
+                        <div id="voterStatus" class="voter-status"></div>
+                    </div>
+                    <div class="card-body">
+                        <div id="votingInactive" class="message-box warning hidden">
+                            <i class="fas fa-pause-circle"></i>
+                            <p>Voting is currently inactive. Please wait for the admin to activate voting.</p>
+                        </div>
+                        
+                        <div id="notRegistered" class="message-box error hidden">
+                            <i class="fas fa-user-times"></i>
+                            <p>You are not registered to vote. Please contact the admin to register your address.</p>
+                        </div>
+                        
+                        <div id="alreadyVoted" class="message-box info hidden">
+                            <i class="fas fa-check-circle"></i>
+                            <p>You have already voted. Thank you for participating!</p>
+                        </div>
+                        
+                        <div id="candidatesList" class="candidates-list">
+                            <!-- Candidates will be populated by JavaScript -->
+                        </div>
+                        
+                        <div id="voteButton" class="vote-section hidden">
+                            <button id="submitVote" class="btn btn-primary btn-large" disabled>
+                                <i class="fas fa-vote-yea"></i>
+                                Submit Vote
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Tab -->
+            <div id="resultsTab" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chart-bar"></i> Election Results</h2>
+                        <button id="refreshResults" class="btn btn-secondary">
+                            <i class="fas fa-refresh"></i>
+                            Refresh
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div id="electionStats" class="election-stats">
+                            <!-- Stats will be populated by JavaScript -->
+                        </div>
+                        
+                        <div id="resultsDisplay" class="results-display">
+                            <!-- Results will be populated by JavaScript -->
+                        </div>
+                        
+                        <div id="winnerAnnouncement" class="winner-announcement hidden">
+                            <!-- Winner will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Tab -->
+            <div id="adminTab" class="tab-content">
+                <div class="admin-grid">
+                    <!-- Voter Management -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-users"></i> Voter Management</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="voterAddress">Voter Address:</label>
+                                <input type="text" id="voterAddress" placeholder="0x..." class="input">
+                                <button id="registerVoter" class="btn btn-primary">
+                                    <i class="fas fa-user-plus"></i>
+                                    Register Voter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Candidate Management -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-user-tie"></i> Candidate Management</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="candidateName">Candidate Name:</label>
+                                <input type="text" id="candidateName" placeholder="Enter candidate name" class="input">
+                                <button id="addCandidate" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i>
+                                    Add Candidate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Election Control -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-toggle-on"></i> Election Control</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="votingStatus" class="status-display">
+                                <!-- Status will be populated by JavaScript -->
+                            </div>
+                            <button id="toggleVoting" class="btn btn-warning">
+                                <i class="fas fa-power-off"></i>
+                                Toggle Voting
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Admin Transfer -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-key"></i> Admin Transfer</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="newAdminAddress">New Admin Address:</label>
+                                <input type="text" id="newAdminAddress" placeholder="0x..." class="input">
+                                <button id="transferAdmin" class="btn btn-danger">
+                                    <i class="fas fa-exchange-alt"></i>
+                                    Transfer Admin
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <p>&copy; 2025 Voting DApp. Built with transparency and security in mind.</p>
+                    <p class="footer-note">
+                        <i class="fas fa-shield-alt"></i>
+                        This is an educational project. Verify all transactions before signing.
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" onclick="showDocumentation()">
+                        <i class="fas fa-book"></i>
+                        Documentation
+                    </a>
+                    <a href="#" onclick="showSecurityInfo()">
+                        <i class="fas fa-lock"></i>
+                        Security
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay hidden">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p id="loadingMessage">Processing transaction...</p>
+        </div>
+    </div>
+
+    <!-- Modal for Messages -->
+    <div id="messageModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Information</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeModal()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.10.0/dist/web3.min.js"></script>
+    <script>
+        // Fallback to local file if CDN fails
+        if (typeof Web3 === 'undefined') {
+            console.log('⚠️ CDN failed, loading local Web3...');
+            document.write('<script src="libs/web3.min.js"><\/script>');
+        }
+    </script>
+    <script src="js/ui.js"></script>
+    <script src="js/contract.js"></script>
+    <script src="js/contract-fix.js"></script>
+    <script src="js/contractAPI.js"></script>
+    <script src="js/voting.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/test.js"></script>
+</body>
+</html>
