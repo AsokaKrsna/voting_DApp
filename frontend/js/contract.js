@@ -18,7 +18,7 @@
 // Contract configuration
 const CONTRACT_CONFIG = {
     // Updated with newly deployed contract address
-    address: "replace with actual deployed contract address", // Deployed contract address
+    address: "0x1341869F580563FEDF48e902DF29885d0EA014d2", // Deployed on Sepolia - October 17, 2025
     abi: null,     // Will be loaded from build artifacts
     
     // Network configurations

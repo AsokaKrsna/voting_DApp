@@ -71,26 +71,32 @@ module.exports = {
       provider: () => {
         // Option 1: Use private key (simpler)
         if (PRIVATE_KEY) {
-          return new HDWalletProvider(
-            [PRIVATE_KEY],
-            `https://sepolia.infura.io/v3/${INFURA_PROJECT_ID}`
-          );
+          return new HDWalletProvider({
+            privateKeys: [PRIVATE_KEY],
+            providerOrUrl: `https://sepolia.infura.io/v3/${INFURA_PROJECT_ID}`,
+            pollingInterval: 8000, // Slower polling to avoid rate limits
+            chainId: 11155111
+          });
         }
         // Option 2: Use mnemonic phrase (generates multiple accounts)
         if (MNEMONIC) {
-          return new HDWalletProvider(
-            MNEMONIC,
-            `https://sepolia.infura.io/v3/${INFURA_PROJECT_ID}`
-          );
+          return new HDWalletProvider({
+            mnemonic: MNEMONIC,
+            providerOrUrl: `https://sepolia.infura.io/v3/${INFURA_PROJECT_ID}`,
+            pollingInterval: 8000,
+            chainId: 11155111
+          });
         }
         throw new Error('Please provide either PRIVATE_KEY or MNEMONIC in .env file');
       },
       network_id: 11155111,  // Sepolia's network id
-      gas: 5500000,          // Gas limit
+      gas: 3000000,          // Gas limit (reduced)
+      gasPrice: 10000000000, // 10 gwei (reduced from 20 to save costs)
       confirmations: 2,      // Number of confirmations to wait between deployments
       timeoutBlocks: 200,    // Number of blocks before timing out
       skipDryRun: true,      // Skip dry run before migrations
-      networkCheckTimeout: 1000000,
+      networkCheckTimeout: 100000,
+      deploymentPollingInterval: 8000,
     },
 
     // Truffle Dashboard (for secure deployment)
@@ -105,21 +111,6 @@ module.exports = {
     // timeout: 100000
   },
 
-  // Configure your compilers
-  compilers: {
-    solc: {
-      version: "0.8.21",      // Fetch exact version from solc-bin (default: truffle's version)
-      // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
-      // settings: {          // See the solidity docs for advice about optimization and evmVersion
-      //  optimizer: {
-      //    enabled: false,
-      //    runs: 200
-      //  },
-      //  evmVersion: "byzantium"
-      // }
-    }
-  },
-
   // Configure compilers
   compilers: {
     solc: {
@@ -128,8 +119,7 @@ module.exports = {
         optimizer: {
           enabled: true,
           runs: 200
-        },
-        evmVersion: "byzantium"
+        }
       }
     }
   },
