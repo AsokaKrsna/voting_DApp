@@ -70,3 +70,6 @@ metamask-state/
 .local/
 .development/
 dev-tools/
+
+#report
+PROJECT_REPORT.md
